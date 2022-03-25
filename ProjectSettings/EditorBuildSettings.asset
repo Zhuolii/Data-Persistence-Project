@@ -18,7 +18,7 @@ EditorBuildSettings:
     path: 
     guid: 00000000000000000000000000000000
   - enabled: 1
-    path: Assets/Scenes/scene2.unity
+    path: Assets/Scenes/Menu.unity
     guid: 433bc2c8da27ebd41b0c721dc613d3fd
   - enabled: 1
     path: Assets/Scenes/High Score.unity

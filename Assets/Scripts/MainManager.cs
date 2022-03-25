@@ -16,19 +16,19 @@ public class MainManager : MonoBehaviour
     public GameObject GameOverWindow;
 
     private bool m_Started = false;
-    private int m_Points;
+    public static int m_Points;
 
    public static int highScore;
 
     private bool m_GameOver = false;
 
-    public static string playerName = MenuManager.playerName;
+    public static string playerName = MenuHandler.username;
 
     
 
 
 
-
+    
 
     // Start is called before the first frame update
     void Start()
@@ -49,8 +49,11 @@ public class MainManager : MonoBehaviour
             }
         }
         ScoreText.text = $"{playerName} score : {m_Points}";
+        
 
         LoadScore();
+        m_Points = 0;
+        Debug.Log("playername = " + playerName);
 
 
 
@@ -79,13 +82,16 @@ public class MainManager : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.Space))
             {
                 SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+                 m_Points = 0;
+                 
 
                 Debug.Log("highscore = " + highScore);
+                m_GameOver = false;
             }
         }
 
 
-        ScoreText.text = $"{playerName} score : {m_Points}";
+        ScoreText.text = $"{MenuHandler.username} score : {m_Points}";
 
         if (m_Points > highScore == true && m_GameOver == true)
         {
@@ -93,7 +99,7 @@ public class MainManager : MonoBehaviour
 
             highScore = 0;
             highScore += m_Points;
-            ScoreText2.text = $"{playerName} Best score : {highScore}";
+            ScoreText2.text = $"{MenuHandler.username} Best score : {highScore}";
             Debug.Log("highscore if  = " + highScore);
             SaveScore();
 
@@ -130,6 +136,19 @@ public class MainManager : MonoBehaviour
     public void BackToMenu()
     {
         SceneManager.LoadScene(1);
+        m_Points = 0;
+        SaveScore();
+    }
+    public void ResetScore()
+    {
+        highScore = 0;
+        m_Points = 0;
+        Debug.Log(highScore);
+        Debug.Log(m_Points);
+        SaveScore();
+          SceneManager.LoadScene(0);
+          GameOverWindow.SetActive(false);
+
     }
 
 
@@ -138,12 +157,14 @@ public class MainManager : MonoBehaviour
     {
         public string scoreText;
         public int score;
+        public string name;
     }
 
     public void SaveScore()
     {
         PlayerHighScore playerScore = new PlayerHighScore();
         playerScore.score = highScore;
+        playerScore.name = playerName;
 
         playerScore.scoreText = $"{playerName} Best score : { highScore}";
 
@@ -165,6 +186,7 @@ public class MainManager : MonoBehaviour
             PlayerHighScore playerScore = JsonUtility.FromJson<PlayerHighScore>(json);
 
             ScoreText2.text = playerScore.scoreText;
+            Debug.Log(" playerScore.scoreText = " + highScore);
             highScore = playerScore.score;
             Debug.Log(" load highscore = " + highScore);
         }
