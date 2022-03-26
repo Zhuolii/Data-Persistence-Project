@@ -100,6 +100,7 @@ public class MainManager : MonoBehaviour
             highScore = 0;
             highScore += m_Points;
             ScoreText2.text = $"{MenuHandler.username} Best score : {highScore}";
+            
             Debug.Log("highscore if  = " + highScore);
             SaveScore();
 
@@ -162,6 +163,7 @@ public class MainManager : MonoBehaviour
 
     public void SaveScore()
     {
+        Debug.Log("start save process");
         PlayerHighScore playerScore = new PlayerHighScore();
         playerScore.score = highScore;
         playerScore.name = playerName;
@@ -171,6 +173,7 @@ public class MainManager : MonoBehaviour
         string json = JsonUtility.ToJson(playerScore);
         File.WriteAllText(Application.persistentDataPath + "/savefile.json", json);
         Debug.Log("savedplayerscore.score = " + playerScore.score);
+        Debug.Log("end save process");
 
 
 
@@ -180,15 +183,19 @@ public class MainManager : MonoBehaviour
         string path = Application.persistentDataPath + "/savefile.json";
         if (File.Exists(path))
         {
+            Debug.Log("start load process");
             string json = File.ReadAllText(path);
             //fromjson<class>(json)
 
             PlayerHighScore playerScore = JsonUtility.FromJson<PlayerHighScore>(json);
+             Debug.Log(" scoretext2 before load = " + ScoreText2.text);
 
             ScoreText2.text = playerScore.scoreText;
-            Debug.Log(" playerScore.scoreText = " + highScore);
+             Debug.Log(" scoretext2 after load = " + ScoreText2.text);
+            Debug.Log(" highscore before load = " + highScore);
             highScore = playerScore.score;
-            Debug.Log(" load highscore = " + highScore);
+            Debug.Log(" load highscore after load = " + highScore);
+              Debug.Log("end load process");
         }
     }
 
